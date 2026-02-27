@@ -1,17 +1,20 @@
+import time
+
+
 class StateManager:
     def __init__(self):
-        self.locked = True
-        self.clipboard_content = ""
-        self.inactivity_timer = 0
-
-    def lock(self):
-        self.locked = True
+        self._locked = True
+        self._last_activity = time.time()
 
     def unlock(self):
-        self.locked = False
+        self._locked = False
+        self.touch()
 
-    def update_clipboard(self, content):
-        self.clipboard_content = content
+    def lock(self):
+        self._locked = True
 
-    def reset_inactivity(self):
-        self.inactivity_timer = 0
+    def is_locked(self) -> bool:
+        return self._locked
+
+    def touch(self):
+        self._last_activity = time.time()
