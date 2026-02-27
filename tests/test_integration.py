@@ -1,12 +1,13 @@
-# tests/test_integration.py
 import pytest
+import tkinter as tk
 from src.gui.setup_wizard import SetupWizard
-from src.core.config import ConfigManager
 from src.core.state_manager import StateManager
 
-def test_setup_wizard(config_manager):
-    sw = SetupWizard(config_manager)
+def test_setup_wizard():
+    root = tk.Tk()
+    sw = SetupWizard(root)
     assert sw is not None
+    root.destroy()
 
 def test_state_manager_lock_unlock():
     sm = StateManager()
