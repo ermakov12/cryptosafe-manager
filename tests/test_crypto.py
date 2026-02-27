@@ -3,9 +3,12 @@ from src.core.crypto.abstract import EncryptionService
 from src.core.crypto.placeholder import AES256Placeholder
 
 def test_abstract_raises():
-    class Dummy(EncryptionService):
-        pass
-    dummy = Dummy()
+    from src.core.crypto.abstract import EncryptionService
+
+    with pytest.raises(TypeError):
+        class Dummy(EncryptionService):
+            pass
+        Dummy()
     import pytest
     with pytest.raises(NotImplementedError):
         dummy.encrypt(b"data", b"key")
@@ -19,3 +22,4 @@ def test_placeholder_xor():
     encrypted = placeholder.encrypt(data, key)
     decrypted = placeholder.decrypt(encrypted, key)
     assert decrypted == data
+
