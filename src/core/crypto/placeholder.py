@@ -1,11 +1,15 @@
 from .abstract import EncryptionService
 
-
-class XorEncryptionService(EncryptionService):
-
+class AES256Placeholder(EncryptionService):
+    """
+    Заглушка для шифрования XOR.
+    Используется до внедрения AES-GCM.
+    """
     def encrypt(self, data: bytes, key: bytes) -> bytes:
-        return bytes(d ^ key[i % len(key)] for i, d in enumerate(data))
+        # Простое XOR шифрование для Sprint 1
+        return bytes([b ^ key[0] for b in data])
 
     def decrypt(self, ciphertext: bytes, key: bytes) -> bytes:
-        return self.encrypt(ciphertext, key)
+        # XOR дешифрование идентично шифрованию
+        return bytes([b ^ key[0] for b in ciphertext])
 
