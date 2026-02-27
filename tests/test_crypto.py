@@ -1,9 +1,21 @@
-from core.crypto.placeholder import XorEncryptionService
+import pytest
+from src.core.crypto.abstract import EncryptionService
+from src.core.crypto.placeholder import AES256Placeholder
 
+def test_abstract_raises():
+    class Dummy(EncryptionService):
+        pass
+    dummy = Dummy()
+    import pytest
+    with pytest.raises(NotImplementedError):
+        dummy.encrypt(b"data", b"key")
+    with pytest.raises(NotImplementedError):
+        dummy.decrypt(b"cipher", b"key")
 
-def test_encrypt_decrypt():
-    service = XorEncryptionService()
-    key = b"secret"
-    data = b"hello"
-    encrypted = service.encrypt(data, key)
-    assert service.decrypt(encrypted, key) == data
+def test_placeholder_xor():
+    key = b'\x01\x02\x03'
+    data = b'hello'
+    placeholder = AES256Placeholder()
+    encrypted = placeholder.encrypt(data, key)
+    decrypted = placeholder.decrypt(encrypted, key)
+    assert decrypted == data
