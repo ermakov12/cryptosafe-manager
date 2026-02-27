@@ -1,8 +1,9 @@
-from core.key_manager import KeyManager
+from src.core.key_manager import KeyManager
 
-
-def test_key_derivation():
+def test_derive_key_and_store_load(tmp_path):
     km = KeyManager()
-    key1 = km.derive_key("pass")
-    key2 = km.derive_key("pass")
-    assert key1 == key2
+    key = km.derive_key("password", b"salt")
+    assert isinstance(key, bytes)
+    km.store_key(key, tmp_path / "keyfile")
+    loaded = km.load_key(tmp_path / "keyfile")
+    assert loaded == key
