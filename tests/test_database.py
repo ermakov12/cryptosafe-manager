@@ -3,7 +3,7 @@ import sqlite3
 from src.database import db, models
 
 def test_db_connection(temp_db_path):
-    database = db.DatabaseHelper(temp_db_path)
+    database = db.Database(temp_db_path)
     conn = database.get_connection()
     assert isinstance(conn, sqlite3.Connection)
 
@@ -18,3 +18,4 @@ def test_models_tables(temp_db_path):
     assert 'audit_log' in tables
     assert 'settings' in tables
     assert 'key_store' in tables
+
