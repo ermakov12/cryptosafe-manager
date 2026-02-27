@@ -1,20 +1,19 @@
-from core.crypto.placeholder import XorEncryptionService
-from core.key_manager import KeyManager
+import pytest
+from src.core.config import ConfigManager
+from src.core.state_manager import StateManager
+from src.core.events import EventBus
+from src.gui.setup_wizard import SetupWizard
 
+def test_setup_wizard(tmp_path):
+    cfg = ConfigManager(tmp_path / "test.db")
+    sw = SetupWizard(cfg)
+    sw.create_master_password("pass", "pass")
+    assert sw.master_password_hash is not None
 
-def test_full_flow(test_db):
-    km = KeyManager()
-    service = XorEncryptionService()
-
-    key = km.derive_key("master")
-    encrypted = service.encrypt(b"pwd", key)
-
-    test_db.execute(
-        "INSERT INTO vault_entries(title, encrypted_password, created_at) VALUES (?, ?, ?)",
-        ("gmail", encrypted, "now")
-    )
-
-    cur = test_db.execute("SELECT encrypted_password FROM vault_entries")
-    stored = cur.fetchone()[0]
-
-    assert service.decrypt(stored, key) == b"pwd"
+def test_state_manager_lock_unlock():
+    sm = StateManager()
+    assert sm.is_locked
+    sm.unlock("dummy")
+    assert not sm.is_locked
+    sm.lock()
+    assert sm.is_locked
