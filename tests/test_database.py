@@ -4,7 +4,7 @@ import pytest
 from src.database import models, db
 
 def test_db_connection(temp_db_path):
-    database = db.Database(temp_db_path)
+    database = db.DatabaseHelper(temp_db_path)
     assert database.conn is not None
 
 def test_models_tables(temp_db_path):
