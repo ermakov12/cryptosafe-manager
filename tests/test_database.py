@@ -1,11 +1,11 @@
-# tests/test_database.py
 import sqlite3
 import pytest
-from src.database import models, db
+from src.database import db, models
 
 def test_db_connection(temp_db_path):
-    database = db.DatabaseHelper(temp_db_path)
-    assert database.conn is not None
+    database = db.Database(str(temp_db_path))
+    cursor = database.execute("SELECT 1")
+    assert cursor.fetchone()[0] == 1
 
 def test_models_tables(temp_db_path):
     conn = sqlite3.connect(temp_db_path)
@@ -17,6 +17,6 @@ def test_models_tables(temp_db_path):
     assert 'audit_log' in tables
     assert 'settings' in tables
     assert 'key_store' in tables
-    conn.close()
+
 
 
